@@ -33,13 +33,13 @@ public class DriveBaseSubsystem extends SubsystemBase {
   DifferentialDrive differentialDrive = new DifferentialDrive(leftFrontSparkMax, rightFrontSparkMax);
   
   public void driveTank(double valueLeft, double valueRight) {
-    differentialDrive.tankDrive(valueLeft, valueRight, true);
-    //leftFrontSparkMax.set(valueLeft);
-    //rightFrontSparkMax.set(-valueRight);
+    //differentialDrive.tankDrive(valueLeft, valueRight, true);
+    leftFrontSparkMax.set(valueLeft);
+    rightFrontSparkMax.set(-valueRight);
   }
 
   public void driveArcade(double xAxisSpeed, double zAxisRotation) {
-    differentialDrive.arcadeDrive(xAxisSpeed, zAxisRotation, true);
+   differentialDrive.arcadeDrive(xAxisSpeed, zAxisRotation, true);
   }
 
   public void stopMotors() {

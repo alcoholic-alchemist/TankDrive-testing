@@ -7,6 +7,7 @@ package frc.robot;
 import java.util.Map;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -31,8 +32,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   //Controllers (if switching to CommandJoystick breaks it revert to Joystick)
-  //private final Joystick joystickLeft = new Joystick(4);
-  //private final Joystick joystickRight = new Joystick(5);
+  //private final Joystick joystickLeft = new Joystick(1);
+  //private final Joystick joystickRight = new Joystick(2);
   private final CommandJoystick joystickLeft;
   private final CommandJoystick joystickRight;
   private final CommandXboxController xboxController;
@@ -53,9 +54,9 @@ public class RobotContainer {
   
   public RobotContainer() {
     //Initialize controllers
-    joystickLeft = new CommandJoystick(4);
-    joystickRight = new CommandJoystick(5);
-    xboxController = new CommandXboxController(0);
+    joystickLeft = new CommandJoystick(1);
+    joystickRight = new CommandJoystick(3);
+    xboxController = new CommandXboxController(2);
 
     //Initialize triggers and buttons
     //triggerButton = new JoystickButton(joystickRight, 1);
