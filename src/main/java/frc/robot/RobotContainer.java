@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AttachmentCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveArcadeCommand;
@@ -34,6 +35,7 @@ public class RobotContainer {
   //private final Joystick joystickRight = new Joystick(5);
   private final CommandJoystick joystickLeft;
   private final CommandJoystick joystickRight;
+  private final CommandXboxController xboxController;
 
   //Triggers and Buttons
   //private final JoystickButton triggerButton;
@@ -53,6 +55,7 @@ public class RobotContainer {
     //Initialize controllers
     joystickLeft = new CommandJoystick(4);
     joystickRight = new CommandJoystick(5);
+    xboxController = new CommandXboxController(0);
 
     //Initialize triggers and buttons
     //triggerButton = new JoystickButton(joystickRight, 1);
@@ -62,7 +65,8 @@ public class RobotContainer {
     attachmentSubsystem = new AttachmentSubsystem();
 
     //Initialize commands
-    attachmentCommand = new AttachmentCommand(attachmentSubsystem, () -> 0.5);
+    //replace getLeftTrigger with 0.5 if neccesary
+    attachmentCommand = new AttachmentCommand(attachmentSubsystem, () -> xboxController.getLeftTriggerAxis());
     
     driveTankCommand = new DriveTankCommand(driveBaseSubsystem, 
     () -> MathUtil.applyDeadband(joystickLeft.getY(), 0.2), 
@@ -93,7 +97,11 @@ public class RobotContainer {
     //driveBaseSubsystem.setDefaultCommand(new DriveTankCommand(driveBaseSubsystem, () -> deadband(joystickLeft.getY(), 0.2), () -> deadband(joystickRight.getY(), 0.2)));
     
     joystickLeft.button(1).whileTrue(attachmentCommand);
+
+    //Two Alternate Ways to Swap Drive Mode Test
     joystickLeft.button(4).onTrue(swapDriveModesCommand);
+    xboxController.a().onTrue(swapDriveModesCommand);
+
   }
 
   private void configureCommandsAndSubsystems() {

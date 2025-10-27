@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.enums.DriveMode;
 import frc.robot.subsystems.DriveBaseSubsystem;
@@ -33,5 +34,6 @@ public class SwapDriveModesCommand extends InstantCommand {
         subsystem.currentDriveMode = DriveMode.TANK;
         break;
     }
+    CommandScheduler.getInstance().cancel(subsystem.getCurrentCommand());
   }
 }
