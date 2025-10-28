@@ -33,9 +33,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
   DifferentialDrive differentialDrive = new DifferentialDrive(leftFrontSparkMax, rightFrontSparkMax);
   
   public void driveTank(double valueLeft, double valueRight) {
-    //differentialDrive.tankDrive(valueLeft, valueRight, true);
-    leftFrontSparkMax.set(valueLeft);
-    rightFrontSparkMax.set(-valueRight);
+    differentialDrive.tankDrive(valueLeft, valueRight, true);
+    //leftFrontSparkMax.set(valueLeft);
+    //rightFrontSparkMax.set(-valueRight);
   }
 
   public void driveArcade(double xAxisSpeed, double zAxisRotation) {
@@ -49,7 +49,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     leftBackSparkMax.stopMotor();
   }
 
-  public DriveBaseSubsystem() {rightFrontSparkMaxConfig.inverted(false).idleMode(IdleMode.kBrake);
+  public DriveBaseSubsystem() {
+    /*rightFrontSparkMaxConfig.inverted(false).idleMode(IdleMode.kBrake);
     rightFrontSparkMax.configure(rightFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   
     rightBackSparkMaxConfig.inverted(true).idleMode(IdleMode.kBrake).follow(9);
@@ -59,6 +60,18 @@ public class DriveBaseSubsystem extends SubsystemBase {
     leftFrontSparkMax.configure(leftFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
     leftBackSparkMaxConfig.inverted(true).idleMode(IdleMode.kBrake).follow(7);
+    leftBackSparkMax.configure(leftFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);*/
+
+    rightFrontSparkMaxConfig.inverted(true).idleMode(IdleMode.kBrake);
+    rightFrontSparkMax.configure(rightFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    rightBackSparkMaxConfig.inverted(true).idleMode(IdleMode.kBrake).follow(9);
+    rightBackSparkMax.configure(rightFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  
+    leftFrontSparkMaxConfig.inverted(false).idleMode(IdleMode.kBrake);
+    leftFrontSparkMax.configure(leftFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
+    leftBackSparkMaxConfig.inverted(false).idleMode(IdleMode.kBrake).follow(7);
     leftBackSparkMax.configure(leftFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   } 
 
