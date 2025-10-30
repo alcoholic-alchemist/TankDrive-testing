@@ -13,24 +13,25 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.MotorConstants;
 import frc.robot.enums.DriveMode;
 
 public class DriveBaseSubsystem extends SubsystemBase {
   public DriveMode currentDriveMode = DriveMode.TANK;
 
-  SparkMax leftFrontSparkMax = new SparkMax(7, MotorType.kBrushed);
-  SparkMax leftBackSparkMax = new SparkMax(8, MotorType.kBrushed);
+  SparkMax leftMasterSM;
+  SparkMax leftFollowerSM;
   
-  SparkMaxConfig leftFrontSparkMaxConfig = new SparkMaxConfig();
-  SparkMaxConfig leftBackSparkMaxConfig = new SparkMaxConfig();
+  SparkMaxConfig leftMasterConfig = new SparkMaxConfig();
+  SparkMaxConfig leftFollowerConfig = new SparkMaxConfig();
 
-  SparkMax rightFrontSparkMax = new SparkMax(9, MotorType.kBrushed);
-  SparkMax rightBackSparkMax = new SparkMax(10, MotorType.kBrushed);
+  SparkMax rightMasterSM;
+  SparkMax rightFollowerSM;
   
-  SparkMaxConfig rightFrontSparkMaxConfig = new SparkMaxConfig();
-  SparkMaxConfig rightBackSparkMaxConfig = new SparkMaxConfig();
+  SparkMaxConfig rightMasterConfig = new SparkMaxConfig();
+  SparkMaxConfig rightFollowerConfig;
 
-  DifferentialDrive differentialDrive = new DifferentialDrive(leftFrontSparkMax, rightFrontSparkMax);
+  DifferentialDrive differentialDrive;
   
   public void driveTank(double valueLeft, double valueRight) {
     differentialDrive.tankDrive(valueLeft, valueRight, true);
@@ -43,13 +44,39 @@ public class DriveBaseSubsystem extends SubsystemBase {
   }
 
   public void stopMotors() {
-    rightFrontSparkMax.stopMotor();
-    rightBackSparkMax.stopMotor();
-    leftFrontSparkMax.stopMotor();
-    leftBackSparkMax.stopMotor();
+    rightMasterSM.stopMotor();
+    rightFollowerSM.stopMotor();
+    leftMasterSM.stopMotor();
+    leftFollowerSM.stopMotor();
   }
 
   public DriveBaseSubsystem() {
+    leftMasterConfig = new SparkMaxConfig();
+    leftFollowerConfig = new SparkMaxConfig();
+
+    rightMasterConfig = new SparkMaxConfig();
+    rightFollowerConfig = new SparkMaxConfig();
+
+    leftMasterSM = new SparkMax(MotorConstants.leftDriveMasterSM, MotorType.kBrushed);
+    leftFollowerSM = new SparkMax(MotorConstants.leftDriveSlaveSM, MotorType.kBrushed);
+
+    rightMasterSM = new SparkMax(MotorConstants.rightDriveMasterSM, MotorType.kBrushed);
+    rightFollowerSM = new SparkMax(MotorConstants.rightDriveSlaveSM, MotorType.kBrushed);
+
+    rightMasterConfig.inverted(true).idleMode(IdleMode.kBrake);
+    rightMasterSM.configure(rightMasterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    rightFollowerConfig.idleMode(IdleMode.kBrake).follow(rightMasterSM);
+    rightFollowerSM.configure(rightFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  
+    leftMasterConfig.inverted(false).idleMode(IdleMode.kBrake);
+    leftMasterSM.configure(leftMasterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
+    leftFollowerConfig.idleMode(IdleMode.kBrake).follow(leftMasterSM);
+    leftFollowerSM.configure(leftFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    differentialDrive = new DifferentialDrive(leftMasterSM, rightMasterSM);
+
     /*rightFrontSparkMaxConfig.inverted(false).idleMode(IdleMode.kBrake);
     rightFrontSparkMax.configure(rightFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   
@@ -61,18 +88,6 @@ public class DriveBaseSubsystem extends SubsystemBase {
     
     leftBackSparkMaxConfig.inverted(true).idleMode(IdleMode.kBrake).follow(7);
     leftBackSparkMax.configure(leftFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);*/
-
-    rightFrontSparkMaxConfig.inverted(true).idleMode(IdleMode.kBrake);
-    rightFrontSparkMax.configure(rightFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    rightBackSparkMaxConfig.inverted(true).idleMode(IdleMode.kBrake).follow(9);
-    rightBackSparkMax.configure(rightFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  
-    leftFrontSparkMaxConfig.inverted(false).idleMode(IdleMode.kBrake);
-    leftFrontSparkMax.configure(leftFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    
-    leftBackSparkMaxConfig.inverted(false).idleMode(IdleMode.kBrake).follow(7);
-    leftBackSparkMax.configure(leftFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   } 
 
   @Override
