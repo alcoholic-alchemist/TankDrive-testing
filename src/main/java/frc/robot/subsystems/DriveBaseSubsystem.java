@@ -13,7 +13,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.MotorConstants;
+import frc.robot.Constants;
 import frc.robot.enums.DriveMode;
 
 public class DriveBaseSubsystem extends SubsystemBase {
@@ -57,11 +57,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
     rightMasterConfig = new SparkMaxConfig();
     rightFollowerConfig = new SparkMaxConfig();
 
-    leftMasterSM = new SparkMax(MotorConstants.leftDriveMasterSM, MotorType.kBrushed);
-    leftFollowerSM = new SparkMax(MotorConstants.leftDriveSlaveSM, MotorType.kBrushed);
+    leftMasterSM = new SparkMax(Constants.MotorConstants.leftDriveMasterSM, MotorType.kBrushed);
+    leftFollowerSM = new SparkMax(Constants.MotorConstants.leftDriveSlaveSM, MotorType.kBrushed);
 
-    rightMasterSM = new SparkMax(MotorConstants.rightDriveMasterSM, MotorType.kBrushed);
-    rightFollowerSM = new SparkMax(MotorConstants.rightDriveSlaveSM, MotorType.kBrushed);
+    rightMasterSM = new SparkMax(Constants.MotorConstants.rightDriveMasterSM, MotorType.kBrushed);
+    rightFollowerSM = new SparkMax(Constants.MotorConstants.rightDriveSlaveSM, MotorType.kBrushed);
 
     rightMasterConfig.inverted(true).idleMode(IdleMode.kBrake);
     rightMasterSM.configure(rightMasterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
