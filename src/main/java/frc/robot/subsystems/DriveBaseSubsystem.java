@@ -34,13 +34,15 @@ public class DriveBaseSubsystem extends SubsystemBase {
   DifferentialDrive differentialDrive;
   
   public void driveTank(double valueLeft, double valueRight) {
-    differentialDrive.tankDrive(valueLeft, valueRight, true);
-    //leftFrontSparkMax.set(valueLeft);
-    //rightFrontSparkMax.set(-valueRight);
+    //differentialDrive.tankDrive(valueLeft, valueRight, true);
+    leftMasterSM.set(valueLeft);
+    rightMasterSM.set(valueRight);
   }
 
   public void driveArcade(double xAxisSpeed, double zAxisRotation) {
-   differentialDrive.arcadeDrive(xAxisSpeed, zAxisRotation, true);
+   //differentialDrive.arcadeDrive(xAxisSpeed, zAxisRotation, true);
+   leftMasterSM.set(xAxisSpeed + zAxisRotation);
+   rightMasterSM.set(xAxisSpeed - zAxisRotation);
   }
 
   public void stopMotors() {
@@ -75,7 +77,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     leftFollowerConfig.idleMode(IdleMode.kBrake).follow(leftMasterSM);
     leftFollowerSM.configure(leftFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    differentialDrive = new DifferentialDrive(leftMasterSM, rightMasterSM);
+    //differentialDrive = new DifferentialDrive(leftMasterSM, rightMasterSM);
 
     /*rightFrontSparkMaxConfig.inverted(false).idleMode(IdleMode.kBrake);
     rightFrontSparkMax.configure(rightFrontSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

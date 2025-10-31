@@ -14,7 +14,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AttachmentSubsystem extends SubsystemBase {
-  SparkMax attachmentSparkMax = new SparkMax(6, MotorType.kBrushed);
+  SparkMax attachmentSparkMax = new SparkMax(6, MotorType.kBrushless);
   SparkMaxConfig attachmentSparkMaxConfig = new SparkMaxConfig();
   /** Creates a new AttachmentSubsystem. */
   public AttachmentSubsystem() {

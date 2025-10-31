@@ -67,7 +67,7 @@ public class RobotContainer {
 
     //Initialize commands
     //replace getLeftTrigger with 0.5 if neccesary
-    attachmentCommand = new AttachmentCommand(attachmentSubsystem, () -> xboxController.getLeftTriggerAxis());
+    attachmentCommand = new AttachmentCommand(attachmentSubsystem, () -> 0.5);
     
     driveTankCommand = new DriveTankCommand(driveBaseSubsystem, 
     () -> MathUtil.applyDeadband(joystickLeft.getY(), 0.2), 
@@ -97,7 +97,7 @@ public class RobotContainer {
     //drivebaseLeft.setDefaultCommand(new LeftDrive(drivebaseLeft, new XboxController(0).getLeftTriggerAxis()));
     //driveBaseSubsystem.setDefaultCommand(new DriveTankCommand(driveBaseSubsystem, () -> deadband(joystickLeft.getY(), 0.2), () -> deadband(joystickRight.getY(), 0.2)));
     
-    joystickLeft.button(1).whileTrue(attachmentCommand);
+    joystickLeft.button(2).whileTrue(attachmentCommand);
 
     //Two Alternate Ways to Swap Drive Mode Test
     joystickLeft.button(4).onTrue(swapDriveModesCommand);
