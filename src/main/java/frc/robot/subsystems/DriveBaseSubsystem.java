@@ -45,6 +45,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
    rightMasterSM.set(xAxisSpeed - zAxisRotation);
   }
 
+  public void moveMotors(double valueLeft, double valueRight) {
+    leftMasterSM.set(valueLeft);
+    rightMasterSM.set(valueRight);
+  }
+
   public void stopMotors() {
     rightMasterSM.stopMotor();
     rightFollowerSM.stopMotor();

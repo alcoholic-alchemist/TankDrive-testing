@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -16,6 +17,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class AttachmentSubsystem extends SubsystemBase {
   SparkMax attachmentSparkMax = new SparkMax(6, MotorType.kBrushless);
   SparkMaxConfig attachmentSparkMaxConfig = new SparkMaxConfig();
+  private final double GEAR_RATIO = 8.1;
+
+  RelativeEncoder encoder = attachmentSparkMax.getEncoder();
   /** Creates a new AttachmentSubsystem. */
   public AttachmentSubsystem() {
     attachmentSparkMaxConfig.inverted(false).idleMode(IdleMode.kBrake);
