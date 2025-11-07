@@ -6,28 +6,29 @@ package frc.robot;
 
 import java.util.Map;
 
+import com.ctre.phoenix6.CANBus;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AttachmentCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveArcadeCommand;
 import frc.robot.commands.DriveTankCommand;
+import frc.robot.commands.GetKrakenCommand;
 import frc.robot.commands.SwapDriveModesCommand;
 import frc.robot.commands.TurnAroundCommand;
 import frc.robot.enums.DriveMode;
 import frc.robot.subsystems.AttachmentSubsystem;
 import frc.robot.subsystems.DriveBaseSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.TestTalonFXSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -59,6 +60,7 @@ public class RobotContainer {
   //Subsystems
   private final DriveBaseSubsystem driveBaseSubsystem;
   private final AttachmentSubsystem attachmentSubsystem;
+  private final TestTalonFXSubsystem testKrakenSubsystem;
 
   //Commands
   private final AttachmentCommand attachmentCommand50;
@@ -68,8 +70,12 @@ public class RobotContainer {
   private final DriveArcadeCommand combinedArcadeCommand;
   private final SwapDriveModesCommand swapDriveModesCommand;
   private final TurnAroundCommand turn180DegreesCommand;
+  private final GetKrakenCommand testKrakenCommand;
 
   ParallelDeadlineGroup turn180Group;
+
+  //DIO
+  private final DigitalInput breakBeamSensor = new DigitalInput(0);
   
   public RobotContainer() {
     //Initialize controllers
@@ -90,10 +96,10 @@ public class RobotContainer {
     left4Button = joystickLeft.button(4);
     left5Button = joystickLeft.button(5);
 
-
     //Initialize subsystems
     driveBaseSubsystem = new DriveBaseSubsystem();
     attachmentSubsystem = new AttachmentSubsystem();
+    testKrakenSubsystem = new TestTalonFXSubsystem();
 
     //Initialize commands
     //replace getLeftTrigger with 0.5 if neccesary
@@ -115,7 +121,9 @@ public class RobotContainer {
     swapDriveModesCommand = new SwapDriveModesCommand(driveBaseSubsystem);
 
     turn180DegreesCommand = new TurnAroundCommand(driveBaseSubsystem);
-    turn180Group = new ParallelDeadlineGroup(new WaitCommand(2), turn180DegreesCommand);
+    turn180Group = new ParallelDeadlineGroup(new WaitCommand(0.5), turn180DegreesCommand);
+
+    testKrakenCommand = new GetKrakenCommand(testKrakenSubsystem, () -> 0.5);
    
     //Interior commands and subsystemX.setDefaultCommand(y)
     configureCommandsAndSubsystems();
@@ -125,21 +133,18 @@ public class RobotContainer {
   }
 
   private void configureBindingsAndTriggers() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`    
-    //drivebase.setDefaultCommand(new DriveCommand(drivebase, () -> joystickLeft.getY(), () -> joystickRight.getY()));
-    //drivebase.setDefaultCommand(new DriveCommand(drivebase, leftTrigger.tr, xboxController.rightTrigger(0.05, null));
-    //drivebaseLeft.setDefaultCommand(new LeftDrive(drivebaseLeft, new XboxController(0).getLeftTriggerAxis()));
-    //driveBaseSubsystem.setDefaultCommand(new DriveTankCommand(driveBaseSubsystem, () -> deadband(joystickLeft.getY(), 0.2), () -> deadband(joystickRight.getY(), 0.2)));
-    
     rightJoystickTrigger.whileTrue(attachmentCommand50);
     leftJoystickTrigger.whileTrue(attachmentCommand75);
     right4Button.toggleOnTrue(attachmentCommand50);
     right5Button.toggleOnTrue(attachmentCommand75);
     left3Button.onTrue(turn180Group);
+    right3Button.whileTrue(testKrakenCommand);
 
     //Two Alternate Ways to Swap Drive Mode Test
     leftThumbButton.onTrue(swapDriveModesCommand);
     xboxController.a().onTrue(swapDriveModesCommand);
+
+    new Trigger(() -> breakBeamSensor.get()).whileFalse(attachmentCommand50);
   }
 
   private void configureCommandsAndSubsystems() {

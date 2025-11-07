@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AttachmentSubsystem extends SubsystemBase {
@@ -28,6 +29,7 @@ public class AttachmentSubsystem extends SubsystemBase {
 
   public void turn(double betweenNeg1and1) {
     attachmentSparkMax.set(betweenNeg1and1);
+    SmartDashboard.putNumber("Attahchment motor speed", betweenNeg1and1);
   }
 
   public void stopMotor() {
