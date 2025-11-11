@@ -10,6 +10,7 @@ import com.ctre.phoenix6.CANBus;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
@@ -21,9 +22,11 @@ import frc.robot.commands.AttachmentCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveArcadeCommand;
 import frc.robot.commands.DriveTankCommand;
+import frc.robot.commands.EncoderMoveCommand;
 import frc.robot.commands.GetKrakenCommand;
 import frc.robot.commands.SwapDriveModesCommand;
 import frc.robot.commands.TurnAroundCommand;
+import frc.robot.commands.auto.AutoSeqCommandGroup;
 import frc.robot.enums.DriveMode;
 import frc.robot.subsystems.AttachmentSubsystem;
 import frc.robot.subsystems.DriveBaseSubsystem;
@@ -121,7 +124,7 @@ public class RobotContainer {
     swapDriveModesCommand = new SwapDriveModesCommand(driveBaseSubsystem);
 
     turn180DegreesCommand = new TurnAroundCommand(driveBaseSubsystem);
-    turn180Group = new ParallelDeadlineGroup(new WaitCommand(0.5), turn180DegreesCommand);
+   // turn180Group = new ParallelDeadlineGroup(new WaitCommand(0.5), turn180DegreesCommand);
 
     testKrakenCommand = new GetKrakenCommand(testKrakenSubsystem, () -> 0.5);
    
@@ -137,8 +140,9 @@ public class RobotContainer {
     leftJoystickTrigger.whileTrue(attachmentCommand75);
     right4Button.toggleOnTrue(attachmentCommand50);
     right5Button.toggleOnTrue(attachmentCommand75);
-    left3Button.onTrue(turn180Group);
+    left3Button.onTrue(turn180DegreesCommand.withTimeout(0.5));
     right3Button.whileTrue(testKrakenCommand);
+    left4Button.onTrue(new EncoderMoveCommand(attachmentSubsystem));
 
     //Two Alternate Ways to Swap Drive Mode Test
     leftThumbButton.onTrue(swapDriveModesCommand);
@@ -170,7 +174,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(new ExampleSubsystem());
+    return new AutoSeqCommandGroup(driveBaseSubsystem, attachmentSubsystem);
   }
 
   @Deprecated //I know I just made this

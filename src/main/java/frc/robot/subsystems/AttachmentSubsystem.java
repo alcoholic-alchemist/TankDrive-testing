@@ -16,15 +16,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AttachmentSubsystem extends SubsystemBase {
-  SparkMax attachmentSparkMax = new SparkMax(6, MotorType.kBrushless);
-  SparkMaxConfig attachmentSparkMaxConfig = new SparkMaxConfig();
+  private final SparkMax attachmentSparkMax = new SparkMax(6, MotorType.kBrushless);
+  private final SparkMaxConfig attachmentSparkMaxConfig = new SparkMaxConfig();
   private final double GEAR_RATIO = 8.1;
+  private final RelativeEncoder encoder = attachmentSparkMax.getEncoder();
 
-  RelativeEncoder encoder = attachmentSparkMax.getEncoder();
   /** Creates a new AttachmentSubsystem. */
   public AttachmentSubsystem() {
     attachmentSparkMaxConfig.inverted(false).idleMode(IdleMode.kBrake);
     attachmentSparkMax.configure(attachmentSparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
   }
 
   public void turn(double betweenNeg1and1) {
@@ -34,6 +35,14 @@ public class AttachmentSubsystem extends SubsystemBase {
 
   public void stopMotor() {
     attachmentSparkMax.stopMotor();
+  }
+
+  public double getEncoderPosition() {
+    return encoder.getPosition();
+  }
+
+  public void zeroEncoder() {
+    encoder.setPosition(0);
   }
   
   @Override
