@@ -18,8 +18,8 @@ public final class Constants {
   } 
 
   public class ControllerConstants {
-    public static final int leftJoystickID = 1;
-    public static final int rightJoystickID = 3;
+    public static final int leftJoystickID = 3;
+    public static final int rightJoystickID = 1;
     public static final int xboxControllerID = 2;
   }
   public class MotorConstants {
@@ -29,5 +29,11 @@ public final class Constants {
     public static final int leftDriveSlaveSM = 10;
 
     public static final int krakenTestPracticeID = 41;
+  }
+
+  public class SpinnerConstants {
+    public static final double p = 0.01;
+    public static final double i = 0;
+    public static final double d = 0;
   }
 }

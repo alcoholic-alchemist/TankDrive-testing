@@ -39,9 +39,7 @@ public class EncoderMoveCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (subsystem.getEncoderPosition() >= 8*8.1) {
-      return true;
-    }
     return false;
   }
+
 }

@@ -12,6 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -142,7 +143,8 @@ public class RobotContainer {
     right5Button.toggleOnTrue(attachmentCommand75);
     left3Button.onTrue(turn180DegreesCommand.withTimeout(0.5));
     right3Button.whileTrue(testKrakenCommand);
-    left4Button.onTrue(new EncoderMoveCommand(attachmentSubsystem));
+    //left4Button.onTrue(new EncoderMoveCommand(attachmentSubsystem));
+    left4Button.onTrue(new InstantCommand(() -> attachmentSubsystem.setPositionUsingEncoderAndPIDS(180), attachmentSubsystem));
 
     //Two Alternate Ways to Swap Drive Mode Test
     leftThumbButton.onTrue(swapDriveModesCommand);
